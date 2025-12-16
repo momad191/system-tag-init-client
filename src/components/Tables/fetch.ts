@@ -119,3 +119,80 @@ export async function getTopChannels() {
     },
   ];
 }
+
+
+
+export async function getUsersTableData() {
+  // Fake delay
+  await new Promise((resolve) => setTimeout(resolve, 1400));
+
+  return [
+    {
+      name: "Mohammed Elsayed",
+      email: "example@example.com",
+      mobile: "0551203580",
+      date: "2023-01-13T18:00:00.000Z",
+      status: "active",
+      role: "User",
+      type: "company",
+    },
+    {
+      name: "Ahmed Ali",
+      email: "example@example.com",
+      mobile: "0551203580",
+      date: "2023-01-13T18:00:00.000Z",
+      status: "active",
+      role: "Admin",
+      type: "individual",
+    },
+    {
+      name: "Hatim Hassan",
+      email: "example@example.com",
+      mobile: "0551203580",
+      date: "2023-01-13T18:00:00.000Z",
+      status: "inactive",
+      role: "Admin",
+      type: "individual",
+    },
+    {
+      name: "Sali Awad",
+      email: "example@example.com",
+      mobile: "0551203580",
+      date: "2023-01-13T18:00:00.000Z",
+      status: "inactive",
+      role: "Admin",
+      type: "individual",
+    },
+  ];
+}
+
+
+
+export async function getTeamsTableData() {
+  // Fake delay
+  await new Promise((resolve) => setTimeout(resolve, 1400));
+
+  return [
+    {
+      name: "Team Zeta",
+      channels: 5,
+      members: 20,
+      createdAt: "2023-01-13T18:00:00.000Z",
+    },
+        {
+      name: "Team beta",
+      channels: 15,
+      members: 200,
+      createdAt: "2023-01-13T18:00:00.000Z",
+    },
+        {
+      name: "Team reta",
+      channels: 25,
+      members: 60,
+      createdAt: "2023-01-13T18:00:00.000Z",
+    },
+        
+  
+    
+  ];
+}

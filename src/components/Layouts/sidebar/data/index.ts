@@ -5,27 +5,97 @@ export const NAV_DATA = [
     label: "MAIN MENU",
     items: [
       {
-        title: "Dashboard",
+        title: "Profile",
+        url: "/profile",
+        icon: Icons.User,
+        items: [],
+      },
+      {
+        title: "Users",
+        url: "/users",
+        icon: Icons.User,
+        items: [],
+      },
+      {
+        title: "Teams",
+        url: "/teams",
+        icon: Icons.User,
+        items: [],
+      },
+      {
+        title: "Channels",
+        url: "/channels",
+        icon: Icons.User,
+        items: [],
+      },
+      {
+        title: "Tickets",
+        url: "/tickets",
+        icon: Icons.User,
+        items: [],
+      },
+      {
+        title: "Conversations",
+        url: "/conversations",
+        icon: Icons.User,
+        items: [],
+      },
+      {
+        title: "Messages",
+        url: "/messages",
+        icon: Icons.User,
+        items: [],
+      },
+      {
+        title: "Contacts",
+        url: "/contacts",
+        icon: Icons.User,
+        items: [],
+      },
+      {
+        title: "Plans",
+        url: "/plans",
+        icon: Icons.User,
+        items: [],
+      },
+      {
+        title: "Settings",
         icon: Icons.HomeIcon,
         items: [
           {
-            title: "eCommerce",
-            url: "/",
+            title: "categories",
+            url: "/settings/categories",
+          },
+          {
+            title: "replies",
+            url: "/settings/replies",
+          },
+          {
+            title: "outcomes",
+            url: "/settings/outcomes",
           },
         ],
       },
+
+
+      // {
+      //   title: "Dashboard",
+      //   icon: Icons.HomeIcon,
+      //   items: [
+      //     {
+      //       title: "eCommerce",
+      //       url: "/",
+      //     },
+      //   ],
+      // },
+
       {
         title: "Calendar",
         url: "/calendar",
         icon: Icons.Calendar,
         items: [],
       },
-      {
-        title: "Profile",
-        url: "/profile",
-        icon: Icons.User,
-        items: [],
-      },
+
       {
         title: "Forms",
         icon: Icons.Alphabet,
@@ -40,7 +110,7 @@ export const NAV_DATA = [
           },
         ],
       },
-      {
+      {  
         title: "Tables",
         url: "/tables",
         icon: Icons.Table,
