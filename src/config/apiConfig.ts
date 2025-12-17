@@ -1,7 +1,7 @@
 // You can adjust the base depending on environment (dev, prod, etc.)
 
-export const BASE_API_URL = "http://localhost:8000";
-// export const BASE_API_URL ="https://system-tag-init-763163751785.europe-west1.run.app";
+// export const BASE_API_URL = "http://localhost:8000";
+export const BASE_API_URL ="https://system-tag-init-763163751785.europe-west1.run.app";
 // Example: specific endpoints
 export const USERS_URL = `${BASE_API_URL}/users`; 
 // export const BRANDS_URL = `${BASE_API_URL}/brands`; 
