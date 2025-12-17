@@ -1,27 +1,27 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { TeamsTable } from "@/components/Tables/teams-table";
+import { PlansTable } from "@/components/Tables/plans-table";
 import { Metadata } from "next";
 import { Button } from "@/components/ui-elements/button";
 import { PlusIcon } from "@/assets/icons";
 export const metadata: Metadata = {
-  title: "Users",
+  title: "Plans",
 };
-const TeamsPage = () => {
+const PlansPage = () => {
   return (
     <>
-      <Breadcrumb pageName="Teams" />
+      <Breadcrumb pageName="Plans" />
       <Button
         className="mb-6"
-        label="Add team"
+        label="Add plan"
         variant="green"
         shape="full"
         size="small"
         icon={<PlusIcon />}
       />
       <div className="space-y-10">
-        <TeamsTable />
+        <PlansTable />
       </div>
     </>
   );
 };
-export default TeamsPage;
+export default PlansPage;

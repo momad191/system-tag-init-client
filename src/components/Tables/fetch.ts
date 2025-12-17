@@ -196,3 +196,181 @@ export async function getTeamsTableData() {
     
   ];
 }
+
+
+
+export async function getChannelsTableData() {
+  // Fake delay
+  await new Promise((resolve) => setTimeout(resolve, 1400));
+
+  return [
+    {
+      name: "Whatsapp hcannel 1",
+      provider: "Twilio",
+      isActive: true,
+      createdAt: "2023-01-13T18:00:00.000Z",
+    },
+  ];
+}
+
+
+
+export async function getTicketsTableData() {
+  // Fake delay
+  await new Promise((resolve) => setTimeout(resolve, 1400));
+
+  return [
+    {
+      channelId: "Whatsapp hcannel 1",
+      title: "Customer cannot login",
+      description: "The customer reports wrong password error",
+      priority: "High",
+      status: "open",
+      assignee: "John Doe",
+      team: "Support",
+      createdAt: "2023-01-13T18:00:00.000Z",
+    },
+  ];
+}
+
+
+
+export async function getContactsTableData() {
+  // Fake delay
+  await new Promise((resolve) => setTimeout(resolve, 1400));
+
+  return [
+    {
+      name: "Mohammed Emad Omer Mohammed Ali",
+      mobile: "0551203580",
+      email: "moemad191@gmail.com",
+      createdAt: "2023-01-13T18:00:00.000Z",
+    },
+        {
+      name: "Mohammed Emad Omer Mohammed Ali",
+      mobile: "0551203580",
+      email: "moemad191@gmail.com",
+      createdAt: "2023-01-13T18:00:00.000Z",
+    },
+        {
+      name: "Mohammed Emad Omer Mohammed Ali",
+      mobile: "0551203580",
+      email: "moemad191@gmail.com",
+      createdAt: "2023-01-13T18:00:00.000Z",
+    },
+        {
+      name: "Mohammed Emad Omer Mohammed Ali",
+      mobile: "0551203580",
+      email: "moemad191@gmail.com",
+      createdAt: "2023-01-13T18:00:00.000Z",
+    },
+        {
+      name: "Mohammed Emad Omer Mohammed Ali",
+      mobile: "0551203580",
+      email: "moemad191@gmail.com",
+      createdAt: "2023-01-13T18:00:00.000Z",
+    },
+  ];
+}
+
+
+
+export async function getPlansTableData() {
+  // Fake delay
+  await new Promise((resolve) => setTimeout(resolve, 1400));
+
+  return [
+    {
+      name: "Plan 1",
+      price: 50,
+      period: "monthly",
+      maxUsers: 10,
+      maxTeams: 5,
+      maxWhatsApp: 2,
+      maxEmails: 2,
+      maxDirectMessages: 1000,
+      start_date:"2025-01-01T00:00:00.000Z",
+      end_date: "2025-12-31T23:59:59.000Z"
+    },
+        {
+      name: "Plan 2",
+      price: 250,
+      period: "monthly",
+      maxUsers: 100,
+      maxTeams: 25,
+      maxWhatsApp: 10,
+      maxEmails: 10,
+      maxDirectMessages: 10000,
+      start_date:"2025-01-01T00:00:00.000Z",
+      end_date: "2025-12-31T23:59:59.000Z"
+    },
+        {
+      name: "Plan 3",
+      price: 500,
+      period: "monthly",
+      maxUsers: 1000,
+      maxTeams: 50,
+      maxWhatsApp: 20,
+      maxEmails: 20,
+      maxDirectMessages: 1000000,
+      start_date:"2025-01-01T00:00:00.000Z",
+      end_date: "2025-12-31T23:59:59.000Z"
+    },
+  ];
+}
+
+
+export async function getCategoriesTableData() {
+  // Fake delay
+  await new Promise((resolve) => setTimeout(resolve, 1400));
+
+  return [
+    {
+      name: "Request for quotation",
+      description: "Request for quotation",
+      color_code: "#FF5733",
+      created_at: "2023-01-13T18:00:00.000Z",
+    },
+
+  {
+      name: "Request for quotation",
+      description: "Request for quotation",
+      color_code: "#FF5733",
+       created_at: "2023-01-13T18:00:00.000Z",
+    },
+        {
+      name: "Request for quotation",
+      description: "Request for quotation",
+      color_code: "#FF5733",
+       created_at: "2023-01-13T18:00:00.000Z",
+    },
+  
+  ];
+}
+
+
+export async function getRepliesTableData() {
+  // Fake delay
+  await new Promise((resolve) => setTimeout(resolve, 1400));
+
+  return [
+    {
+      title: "Request for quotation",
+      message: "Request for quotation"
+    }
+  ];
+}
+
+
+
+export async function getOutcomesTableData() {
+  // Fake delay
+  await new Promise((resolve) => setTimeout(resolve, 1400));
+
+  return [
+    {
+      name: "Sales - Order processed",
+      description: "Sales - Order processed"
+    }
+  ];
+}

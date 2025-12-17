@@ -10,6 +10,9 @@ type PropsType = {
   minimal?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   radius?: "default" | "md";
+  type?: "checkbox" | "radio";
+  handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  checked?: boolean;
 };
 
 export function Checkbox({
@@ -20,6 +23,8 @@ export function Checkbox({
   minimal,
   onChange,
   radius,
+  type = "checkbox",
+  handleChange
 }: PropsType) {
   const id = useId();
 
@@ -35,7 +40,7 @@ export function Checkbox({
         <div className="relative">
           <input
             type="checkbox"
-            onChange={onChange}
+            onChange={handleChange}
             name={name}
             id={id}
             className="peer sr-only"

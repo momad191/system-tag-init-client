@@ -34,18 +34,18 @@ export const NAV_DATA = [
         icon: Icons.User,
         items: [],
       },
-      {
-        title: "Conversations",
-        url: "/conversations",
-        icon: Icons.User,
-        items: [],
-      },
-      {
-        title: "Messages",
-        url: "/messages",
-        icon: Icons.User,
-        items: [],
-      },
+      // {
+      //   title: "Conversations",
+      //   url: "/conversations",
+      //   icon: Icons.User,
+      //   items: [],
+      // },
+      // {
+      //   title: "Messages",
+      //   url: "/messages",
+      //   icon: Icons.User,
+      //   items: [],
+      // },
       {
         title: "Contacts",
         url: "/contacts",

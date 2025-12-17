@@ -29,7 +29,7 @@ const InputGroup: React.FC<InputGroupProps> = ({
   active,
   handleChange,
   icon,
-  ...props
+  ...props 
 }) => {
   const id = useId();
 
