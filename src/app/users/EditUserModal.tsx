@@ -1,39 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { createUser } from "@/lib/features/userSlice";
+import { updateUserById, User } from "@/lib/features/userSlice";
 import { AppDispatch } from "@/lib/store";
 import { Checkbox } from "@/components/FormElements/checkbox";
 
-type AddUserModalProps = {
+type EditUserModalProps = {
     isOpen: boolean;
     onClose: () => void;
+    user: User | null;
 };
 
-export const AddUserModal = ({ isOpen, onClose }: AddUserModalProps) => {
+export const EditUserModal = ({ isOpen, onClose, user }: EditUserModalProps) => {
     const dispatch = useDispatch<AppDispatch>();
 
-    const [formData, setFormData] = useState({
-        fullName: "",
-        email: "",
-        mobile: "",
-        passwordHash: "123123",
-        role: "User",
-        type: "individual",
-        status: "active",
-        access_reports: true,
-        access_broadcasts: true,
-        access_settings: true,
-        access_channels: true,
-        access_accounts: true,
-        is_email_verified: true,
-        added_by: "",
-        subscriptionId: "",
-    });
-
-    const [error, setError] = useState<string | null>(null);
+    const [formData, setFormData] = useState<Partial<User>>({});
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    /* ----------------------------------------------------
+       Fill form when user changes
+    ---------------------------------------------------- */
+    useEffect(() => {
+        if (user) {
+            setFormData({
+                fullName: user.fullName,
+                email: user.email,
+                mobile: user.mobile,
+                role: user.role,
+                type: user.type,
+                status: user.status,
+                access_reports: user.access_reports,
+                access_broadcasts: user.access_broadcasts,
+                access_settings: user.access_settings,
+                access_channels: user.access_channels,
+                access_accounts: user.access_accounts,
+                is_email_verified: user.is_email_verified,
+            });
+        }
+    }, [user]);
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -48,40 +54,48 @@ export const AddUserModal = ({ isOpen, onClose }: AddUserModalProps) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!user) return;
+
         setLoading(true);
         setError(null);
 
         try {
-            await dispatch(createUser(formData)).unwrap();
+            await dispatch(
+                updateUserById({
+                    id: user.id,
+                    userData: formData,
+                })
+            ).unwrap();
+
             onClose();
         } catch (err: any) {
-            setError(err?.message || "Failed to create user");
+            setError(err || "Failed to update user");
         } finally {
             setLoading(false);
         }
     };
 
-    if (!isOpen) return null;
+    if (!isOpen || !user) return null;
 
     return (
-        /* 🔴 Overlay (click closes modal) */
+        /* 🔴 Overlay */
         <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
             onClick={onClose}
         >
-            {/* 🟢 Modal box (prevent close when clicking inside) */}
+            {/* 🟢 Modal */}
             <div
                 className="w-full max-w-lg rounded-lg bg-white p-6 shadow-lg"
                 onClick={(e) => e.stopPropagation()}
             >
-                <h2 className="mb-4 text-xl font-semibold">Add New User</h2>
+                <h2 className="mb-4 text-xl font-semibold">Edit User</h2>
 
                 {error && <p className="mb-3 text-red-500">{error}</p>}
 
                 <form onSubmit={handleSubmit} className="space-y-3">
                     <input
                         name="fullName"
-                        value={formData.fullName}
+                        value={formData.fullName || ""}
                         onChange={handleChange}
                         placeholder="Full Name"
                         className="w-full rounded border p-2 bg-white"
@@ -91,7 +105,7 @@ export const AddUserModal = ({ isOpen, onClose }: AddUserModalProps) => {
                     <input
                         name="email"
                         type="email"
-                        value={formData.email}
+                        value={formData.email || ""}
                         onChange={handleChange}
                         placeholder="Email"
                         className="w-full rounded border p-2 bg-white"
@@ -100,16 +114,15 @@ export const AddUserModal = ({ isOpen, onClose }: AddUserModalProps) => {
 
                     <input
                         name="mobile"
-                        value={formData.mobile}
+                        value={formData.mobile || ""}
                         onChange={handleChange}
                         placeholder="Mobile"
                         className="w-full rounded border p-2 bg-white"
-                        required
                     />
 
                     <select
                         name="role"
-                        value={formData.role}
+                        value={formData.role || "User"}
                         onChange={handleChange}
                         className="w-full rounded border p-2 bg-white"
                     >
@@ -122,7 +135,7 @@ export const AddUserModal = ({ isOpen, onClose }: AddUserModalProps) => {
 
                     <select
                         name="type"
-                        value={formData.type}
+                        value={formData.type || "individual"}
                         onChange={handleChange}
                         className="w-full rounded border p-2 bg-white"
                     >
@@ -132,7 +145,7 @@ export const AddUserModal = ({ isOpen, onClose }: AddUserModalProps) => {
 
                     <select
                         name="status"
-                        value={formData.status}
+                        value={formData.status || "active"}
                         onChange={handleChange}
                         className="w-full rounded border p-2 bg-white"
                     >
@@ -140,9 +153,9 @@ export const AddUserModal = ({ isOpen, onClose }: AddUserModalProps) => {
                         <option value="inactive">Inactive</option>
                     </select>
 
-                    {/* Permissions */} 
-                    <h5>Permissions</h5>
-                    <div className="grid grid-cols-2 gap-2 pt-2">
+                    {/* Permissions */}
+                    <h5 className="pt-2 font-medium">Permissions</h5>
+                    <div className="grid grid-cols-2 gap-2">
                         {[
                             "access_reports",
                             "access_broadcasts",
@@ -151,24 +164,22 @@ export const AddUserModal = ({ isOpen, onClose }: AddUserModalProps) => {
                             "access_accounts",
                             "is_email_verified",
                         ].map((field) => (
-                            <label key={field} className="flex items-center gap-2 text-sm">
-                                {/* <input
-                                type="checkbox"
-                                name={field}
-                                checked={formData[field as keyof typeof formData] as boolean}
-                                onChange={handleChange}
-                                /> */}
-
+                            <label
+                                key={field}
+                                className="flex items-center gap-2 text-sm"
+                            >
                                 <Checkbox
-                                    type={"checkbox"}
+                                    type="checkbox"
                                     name={field}
-                                    checked={formData[field as keyof typeof formData] as boolean}
+                                    checked={Boolean(
+                                        formData[field as keyof typeof formData]
+                                    )}
                                     handleChange={handleChange}
                                     label=""
-                                     
-                                     />
+                                    
+                                />
 
-
+                               
 
                                 {field.replace(/_/g, " ")}
                             </label>
@@ -187,9 +198,9 @@ export const AddUserModal = ({ isOpen, onClose }: AddUserModalProps) => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="rounded bg-green-600 px-4 py-2 text-white disabled:opacity-50"
+                            className="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
                         >
-                            {loading ? "Saving..." : "Add User"}
+                            {loading ? "Saving..." : "Update User"}
                         </button>
                     </div>
                 </form>

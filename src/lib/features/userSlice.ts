@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { USERS_URL } from "@/config/apiConfig";
-
+  
 /* ======================================================
    Types
 ====================================================== */

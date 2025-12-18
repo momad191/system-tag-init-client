@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './features/userSlice'
+import authReducer from "./features/authSlice";
 // import counterReducer from './features/counterSlice'
 // import authReducer from './features/authSlice'; 
 // import categoryReducer from './features/categorySlice'
@@ -27,9 +28,9 @@ import userReducer from './features/userSlice'
 
 export const store = configureStore({
   reducer: {
-    // auth: authReducer,
     // counter: counterReducer,
     users: userReducer,
+    auth: authReducer,
     // categories: categoryReducer,
     // subCategories: subCategoriesReducer,
     // subSubCategories: subSubCategoriesReducer,
@@ -61,4 +62,6 @@ export const store = configureStore({
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+ 
 

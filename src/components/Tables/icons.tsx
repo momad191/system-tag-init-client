@@ -1,6 +1,6 @@
 import { IconProps } from "@/types/icon-props";
 
-export function PreviewIcon(props: IconProps) {
+export function PreviewIcon(props: IconProps) { 
   return (
     <svg
       width={20}

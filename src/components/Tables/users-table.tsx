@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { TrashIcon } from "@/assets/icons";
+import { TrashIcon, PencilSquareIcon } from "@/assets/icons";
 import {
   Table,
   TableBody,
@@ -16,14 +16,16 @@ import { cn } from "@/lib/utils";
 import dayjs from "dayjs";
 
 import { DownloadIcon, PreviewIcon } from "./icons";
-import { fetchUsers } from "@/lib/features/userSlice";
+import { fetchUsers, User } from "@/lib/features/userSlice";
+import { EditUserModal } from "@/app/users/EditUserModal";
+import { DeleteUserModal } from "@/app/users/DeleteUserModal";
 
 /* ----------------------------------
-   Types (optional but recommended)
+   Types
 ----------------------------------- */
 interface RootState {
   users: {
-    users: any[];
+    users: User[];
     loading: boolean;
     error: string | null;
   };
@@ -31,20 +33,25 @@ interface RootState {
 
 export function UsersTable() {
   const dispatch = useDispatch();
-
   const { users, loading, error } = useSelector(
     (state: RootState) => state.users
   );
 
   /* ----------------------------------
-     Fetch users on mount
+     Edit modal state
+  ----------------------------------- */
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [deleteUser, setDeleteUser] = useState<User | null>(null);
+
+  /* ----------------------------------
+     Fetch users
   ----------------------------------- */
   useEffect(() => {
     dispatch(fetchUsers({ page: 1, limit: 10 }) as any);
   }, [dispatch]);
 
   /* ----------------------------------
-     Loading / Error states
+     Loading / Error
   ----------------------------------- */
   if (loading) {
     return (
@@ -63,95 +70,111 @@ export function UsersTable() {
   }
 
   return (
-    <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5">
-      <Table>
-        <TableHeader>
-          <TableRow className="border-none bg-[#F7F9FC] dark:bg-dark-2 [&>th]:py-4 [&>th]:text-base [&>th]:text-dark [&>th]:dark:text-white">
-            <TableHead className="min-w-[155px] xl:pl-7.5">Name</TableHead> 
-            <TableHead className="min-w-[155px] xl:pl-7.5">Email</TableHead>
-            <TableHead className="min-w-[155px] xl:pl-7.5">Mobile</TableHead>
-            <TableHead className="min-w-[155px] xl:pl-7.5">Role</TableHead>
-            <TableHead className="min-w-[155px] xl:pl-7.5">Type</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right xl:pr-7.5">
-              Actions
-            </TableHead>
-          </TableRow>
-        </TableHeader>
+    <>
+      {/* 🔵 Edit User Modal */}
+      <EditUserModal
+        isOpen={!!selectedUser}
+        user={selectedUser}
+        onClose={() => setSelectedUser(null)}
+      />
+      <DeleteUserModal
+        isOpen={!!deleteUser}
+        user={deleteUser}
+        onClose={() => setDeleteUser(null)}
+      />
 
-        <TableBody>
-          {users.map((item) => (
-            <TableRow
-              key={item.id}
-              className="border-[#eee] dark:border-dark-3"
-            >
-              <TableCell className="min-w-[155px] xl:pl-7.5">
-                <h5 className="text-dark dark:text-white">{item.fullName}</h5>
-              </TableCell>
-
-              <TableCell className="min-w-[155px] xl:pl-7.5">
-                <h5 className="text-dark dark:text-white">{item.email}</h5>
-              </TableCell>
-
-              <TableCell className="min-w-[155px] xl:pl-7.5">
-                <h5 className="text-dark dark:text-white">{item.mobile}</h5>
-              </TableCell>
-
-              <TableCell className="min-w-[155px] xl:pl-7.5">
-                <h5 className="text-dark dark:text-white">{item.role}</h5>
-              </TableCell>
-
-              <TableCell className="min-w-[155px] xl:pl-7.5">
-                <h5 className="text-dark dark:text-white">{item.type}</h5>
-              </TableCell>
-
-              <TableCell>
-                <p className="text-dark dark:text-white">
-                  {dayjs(item.createdAt).format("MMM DD, YYYY")}
-                </p>
-              </TableCell>
-
-              <TableCell>
-                <div
-                  className={cn(
-                    "max-w-fit rounded-full px-3.5 py-1 text-sm font-medium",
-                    {
-                      "bg-[#219653]/[0.08] text-[#219653]":
-                        item.status === "active",
-                      "bg-[#D34053]/[0.08] text-[#D34053]":
-                        item.status === "inactive",
-                      "bg-[#FFA70B]/[0.08] text-[#FFA70B]":
-                        item.status === "Pending",
-                    }
-                  )}
-                >
-                  {item.status}
-                </div>
-              </TableCell>
-
-              <TableCell className="xl:pr-7.5">
-                <div className="flex items-center justify-end gap-x-3.5">
-                  <button className="hover:text-primary">
-                    <span className="sr-only">Preview</span>
-                    <PreviewIcon />
-                  </button>
-
-                  <button className="hover:text-primary">
-                    <span className="sr-only">Delete</span>
-                    <TrashIcon />
-                  </button>
-
-                  <button className="hover:text-primary">
-                    <span className="sr-only">Download</span>
-                    <DownloadIcon />
-                  </button>
-                </div>
-              </TableCell>
+      <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5">
+        <Table>
+          <TableHeader>
+            <TableRow className="border-none bg-[#F7F9FC] dark:bg-dark-2 [&>th]:py-4 [&>th]:text-base [&>th]:text-dark [&>th]:dark:text-white">
+              <TableHead className="min-w-[155px] xl:pl-7.5">Name</TableHead>
+              <TableHead className="min-w-[155px] xl:pl-7.5">Email</TableHead>
+              <TableHead className="min-w-[155px] xl:pl-7.5">Mobile</TableHead>
+              <TableHead className="min-w-[155px] xl:pl-7.5">Role</TableHead>
+              <TableHead className="min-w-[155px] xl:pl-7.5">Type</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="text-right xl:pr-7.5">
+                Actions
+              </TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+          </TableHeader>
+
+          <TableBody>
+            {users.map((item) => (
+              <TableRow
+                key={item.id}
+                className="border-[#eee] dark:border-dark-3"
+              >
+                <TableCell className="min-w-[155px] xl:pl-7.5">
+                  <h5 className="text-dark dark:text-white">
+                    {item.fullName}
+                  </h5>
+                </TableCell>
+
+                <TableCell className="min-w-[155px] xl:pl-7.5">
+                  {item.email}
+                </TableCell>
+
+                <TableCell className="min-w-[155px] xl:pl-7.5">
+                  {item.mobile}
+                </TableCell>
+
+                <TableCell className="min-w-[155px] xl:pl-7.5">
+                  {item.role}
+                </TableCell>
+
+                <TableCell className="min-w-[155px] xl:pl-7.5">
+                  {item.type}
+                </TableCell>
+
+                <TableCell>
+                  {dayjs(item.createdAt).format("MMM DD, YYYY")}
+                </TableCell>
+
+                <TableCell>
+                  <div
+                    className={cn(
+                      "max-w-fit rounded-full px-3.5 py-1 text-sm font-medium",
+                      {
+                        "bg-[#219653]/[0.08] text-[#219653]":
+                          item.status === "active",
+                        "bg-[#D34053]/[0.08] text-[#D34053]":
+                          item.status === "inactive",
+                      }
+                    )}
+                  >
+                    {item.status}
+                  </div>
+                </TableCell>
+
+                <TableCell className="xl:pr-7.5">
+                  <div className="flex items-center justify-end gap-x-3.5">
+                    <button className="hover:text-primary">
+                      <PreviewIcon />
+                    </button>
+
+                    <button
+                      className="hover:text-red-600"
+                      onClick={() => setDeleteUser(item)}
+                    >
+                      <TrashIcon />
+                    </button>
+
+                    {/* ✏️ Edit user */}
+                    <button
+                      className="hover:text-primary"
+                      onClick={() => setSelectedUser(item)}
+                    >
+                      <PencilSquareIcon />
+                    </button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </>
   );
 }
