@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './features/userSlice'
 import authReducer from "./features/authSlice";
+import channelReducer from './features/channelSlice';
+import teamReducer from './features/teamSlice'; 
 // import counterReducer from './features/counterSlice'
 // import authReducer from './features/authSlice'; 
 // import categoryReducer from './features/categorySlice'
@@ -24,13 +26,13 @@ import authReducer from "./features/authSlice";
 // import authCookieReducer from "./features/authCookieSlice";
 
 
- 
-
 export const store = configureStore({
   reducer: {
     // counter: counterReducer,
     users: userReducer,
     auth: authReducer,
+    channels: channelReducer,
+    teams: teamReducer,
     // categories: categoryReducer,
     // subCategories: subCategoriesReducer,
     // subSubCategories: subSubCategoriesReducer,

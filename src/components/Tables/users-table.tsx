@@ -15,7 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import dayjs from "dayjs";
 
-import { DownloadIcon, PreviewIcon } from "./icons";
+import {  PreviewIcon } from "./icons";
 import { fetchUsers, User } from "@/lib/features/userSlice";
 import { EditUserModal } from "@/app/users/EditUserModal";
 import { DeleteUserModal } from "@/app/users/DeleteUserModal";
@@ -34,7 +34,7 @@ interface RootState {
 export function UsersTable() {
   const dispatch = useDispatch();
   const { users, loading, error } = useSelector(
-    (state: RootState) => state.users
+    (state: RootState) => state.users 
   );
 
   /* ----------------------------------

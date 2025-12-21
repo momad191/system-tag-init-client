@@ -29,7 +29,7 @@ const UsersPage = () => {
       />
 
       <div className="space-y-10">
-        <UsersTable />
+        <UsersTable /> 
       </div>
 
       <AddUserModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />

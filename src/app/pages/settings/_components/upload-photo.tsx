@@ -1,17 +1,65 @@
+"use client";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { UploadIcon } from "@/assets/icons";
 import { ShowcaseSection } from "@/components/Layouts/showcase-section";
 import Image from "next/image";
+import { AppDispatch } from "@/lib/store";
+import { updateUserById } from "@/lib/features/userSlice";
+
+/* ----------------------------------
+   Redux State
+----------------------------------- */
+interface RootState {
+  users: {
+    selectedUser: any;
+    loading: boolean;
+  };
+}
 
 export function UploadPhotoForm() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { selectedUser, loading } = useSelector(
+    (state: RootState) => state.users,
+  );
+
+  /* ----------------------------------
+     Local form state
+  ----------------------------------- */
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    mobile: "",
+    username: "",
+    bio: "",
+    image: "",
+  });
+
+  /* ----------------------------------
+     Sync Redux user → form
+  ----------------------------------- */
+  useEffect(() => {
+    if (selectedUser) {
+      setFormData({
+        fullName: selectedUser.fullName || "",
+        email: selectedUser.email || "",
+        mobile: selectedUser.mobile || "",
+        username: selectedUser.username || "",
+        bio: selectedUser.bio || "",
+        image: selectedUser.image || "",
+      });
+    }
+  }, [selectedUser]);
+
   return (
     <ShowcaseSection title="Your Photo" className="!p-7">
       <form>
         <div className="mb-4 flex items-center gap-3">
           <Image
-            src="/images/user/user-03.png"
+            src={selectedUser.image || "/images/user/user-03.png"}
             width={55}
             height={55}
-            alt="User"
+            alt={selectedUser.fullName || "User Photo"}
             className="size-14 rounded-full object-cover"
             quality={90}
           />

@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 
 // const API_URL = "http://localhost:8000/auth/login";
 import { LOGIN_URL } from "@/config/apiConfig";
- 
+
 /* -----------------------------
    Types
 ----------------------------- */
@@ -64,6 +64,12 @@ export const login = createAsyncThunk<
       sameSite: "strict",
     });
 
+    Cookies.set("userId", data.user._id, {
+      expires: 1, // 1 day
+      secure: true,
+      sameSite: "strict",
+    });
+
     return data;
   } catch (error) {
     return thunkAPI.rejectWithValue("Network error");
@@ -81,8 +87,10 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       Cookies.remove("token");
+      Cookies.remove("userId");
     },
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state) => {

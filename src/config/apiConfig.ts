@@ -5,6 +5,8 @@ export const BASE_API_URL = "http://localhost:8000";
 // Example: specific endpoints
 export const USERS_URL = `${BASE_API_URL}/users`; 
 export const LOGIN_URL = `${BASE_API_URL}/auth/login`;  
+export const CHANNELS_URL = `${BASE_API_URL}/channels`;
+export const TEAMS_URL = `${BASE_API_URL}/teams`;
 // export const BRANDS_URL = `${BASE_API_URL}/brands`; 
 // export const ORDERS_URL = `${BASE_API_URL}/orders`; 
 // export const CATEGORIES_URL = `${BASE_API_URL}/categories`;  
@@ -20,4 +22,4 @@ export const LOGIN_URL = `${BASE_API_URL}/auth/login`;
 // export const WHITELIST_URL = `${BASE_API_URL}/whitelist`;
 // export const ADRESSES_URL = `${BASE_API_URL}/address`;
 // export const OFFERS_URL = `${BASE_API_URL}/offers`;
-// export const COMPANIES_URL = `${BASE_API_URL}/companies`; 
+// export const COMPANIES_URL = `${BASE_API_URL}/companies`;  

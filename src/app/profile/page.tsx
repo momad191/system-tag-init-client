@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import Image from "next/image";
+// import Image from "next/image";
 
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { CameraIcon } from "./_components/icons";
@@ -26,7 +26,7 @@ export default function ProfilePage() {
   const dispatch = useDispatch<AppDispatch>();
 
   const { selectedUser, loading } = useSelector(
-    (state: RootState) => state.users
+    (state: RootState) => state.users,
   );
 
   /* ----------------------------------
@@ -34,14 +34,15 @@ export default function ProfilePage() {
   ----------------------------------- */
   const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
   const [coverPhoto, setCoverPhoto] = useState<string>(
-    "/images/cover/cover-01.png"
+    "/images/cover/cover-01.png",
   );
 
   /* ----------------------------------
      Fetch logged-in user
   ----------------------------------- */
   useEffect(() => {
-    const userId = "692d47793805cc7f93138416";
+    // const userId = "692d47793805cc7f93138416";
+    const userId = Cookies.get("userId");
     if (userId) {
       dispatch(fetchUserById(userId));
     }
@@ -83,7 +84,7 @@ export default function ProfilePage() {
 
       <div className="overflow-hidden rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
         {/* ---------------- Cover ---------------- */}
-        <div className="relative z-20 h-35 md:h-65">
+        <div className="relative h-35 md:h-65">
           <img
             src={coverPhoto}
             alt="profile cover"
@@ -110,7 +111,7 @@ export default function ProfilePage() {
         <div className="px-4 pb-6 text-center">
           <div className="relative mx-auto -mt-22 h-30 max-w-30 rounded-full bg-white p-1 sm:h-44 sm:max-w-[176px]">
             <img
-              src={profilePhoto || "/images/user/user-03.png"}
+              src={selectedUser.image || "/images/user/user-03.png"}
               width={160}
               height={160}
               className="rounded-full"
@@ -152,15 +153,13 @@ export default function ProfilePage() {
                 <span className="block text-sm">Verified</span>
               </div>
             </div>
- 
+
             {/* ---------------- About ---------------- */}
             <div className="mx-auto max-w-[720px]">
               <h4 className="font-medium text-dark dark:text-white">
                 About Me
               </h4>
-              <p className="mt-4 text-sm text-gray-500">
-                {selectedUser.email}
-              </p>
+              <p className="mt-4 text-sm text-gray-500">{selectedUser.email}</p>
             </div>
 
             <SocialAccounts />

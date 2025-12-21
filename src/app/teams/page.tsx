@@ -1,12 +1,16 @@
+"use client";
+import { useState } from "react";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { TeamsTable } from "@/components/Tables/teams-table";
-import { Metadata } from "next";
+
 import { Button } from "@/components/ui-elements/button";
 import { PlusIcon } from "@/assets/icons";
-export const metadata: Metadata = {
-  title: "Users",
-};
+import AddTeamModal from "./AddTeamModal";
+
 const TeamsPage = () => {
+
+  const [open, setOpen] = useState(false);
+
   return (
     <>
       <Breadcrumb pageName="Teams" />
@@ -17,10 +21,12 @@ const TeamsPage = () => {
         shape="full"
         size="small"
         icon={<PlusIcon />}
+        onClick={() => setOpen(true)}
       />
       <div className="space-y-10">
         <TeamsTable />
       </div>
+      <AddTeamModal open={open} onClose={() => setOpen(false)} />
     </>
   );
 };
