@@ -1,12 +1,14 @@
+'use client'
+import { useState } from "react";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { PlansTable } from "@/components/Tables/plans-table";
-import { Metadata } from "next";
 import { Button } from "@/components/ui-elements/button";
 import { PlusIcon } from "@/assets/icons";
-export const metadata: Metadata = {
-  title: "Plans",
-};
+import AddPlanModal from "@/app/plans/AddPlanModal";
 const PlansPage = () => {
+
+  const [open, setOpen] = useState(false);
+
   return (
     <>
       <Breadcrumb pageName="Plans" />
@@ -17,10 +19,12 @@ const PlansPage = () => {
         shape="full"
         size="small"
         icon={<PlusIcon />}
+        onClick={() => setOpen(true)}
       />
       <div className="space-y-10">
         <PlansTable />
       </div>
+      <AddPlanModal open={open} onClose={() => setOpen(false)} />
     </>
   );
 };

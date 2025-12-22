@@ -1,12 +1,14 @@
+"use client";
+import { useState } from "react";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { ContactsTable } from "@/components/Tables/contacts-table";
-import { Metadata } from "next";
 import { Button } from "@/components/ui-elements/button";
 import { PlusIcon } from "@/assets/icons";
-export const metadata: Metadata = {
-  title: "Contacts",
-};
+import AddContactModal from "./AddContactModal";
+
 const ContactsPage = () => {
+  const [open, setOpen] = useState(false);
+
   return (
     <>
       <Breadcrumb pageName="Contacts" />
@@ -17,10 +19,13 @@ const ContactsPage = () => {
         shape="full"
         size="small"
         icon={<PlusIcon />}
+        onClick={() => setOpen(true)}
       />
+
       <div className="space-y-10">
         <ContactsTable />
       </div>
+      <AddContactModal open={open} onClose={() => setOpen(false)} />
     </>
   );
 };

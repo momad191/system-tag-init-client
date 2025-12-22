@@ -1,10 +1,12 @@
-import { configureStore } from '@reduxjs/toolkit'
-import userReducer from './features/userSlice'
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "./features/userSlice";
 import authReducer from "./features/authSlice";
-import channelReducer from './features/channelSlice';
-import teamReducer from './features/teamSlice'; 
+import channelReducer from "./features/channelSlice";
+import teamReducer from "./features/teamSlice";
+import contactReducere from "./features/contactSlice";
+import planReducer from "./features/planSlice";
 // import counterReducer from './features/counterSlice'
-// import authReducer from './features/authSlice'; 
+// import authReducer from './features/authSlice';
 // import categoryReducer from './features/categorySlice'
 // import subCategoriesReducer from './features/subCategorySlice'
 // import subSubCategoriesReducer from './features/subSubCategorySlice'
@@ -14,17 +16,16 @@ import teamReducer from './features/teamSlice';
 // import orderReducer from './features/orderSlice'
 // import stripeReducer from './features/stripeSlice';
 // import paymentReducer from './features/paymentSlice';
-// import invoiceReducer from './features/invoiceSlice';  
+// import invoiceReducer from './features/invoiceSlice';
 // import taxReducer from './features/taxSlice';
 // import returnReducer from './features/returnSlice';
 // import whitelistReducer from "./features/whitelistSlice";
 // import walletReducer from './features/walletSlice'
-// import addressReducer from './features/addressSlice';  
+// import addressReducer from './features/addressSlice';
 // import offerReducer from './features/offerSlice'
 // import companiesReducer from "./features/companiesSlice";
 // import settingReducer from "./features/settingSlice";
 // import authCookieReducer from "./features/authCookieSlice";
-
 
 export const store = configureStore({
   reducer: {
@@ -33,6 +34,8 @@ export const store = configureStore({
     auth: authReducer,
     channels: channelReducer,
     teams: teamReducer,
+    contacts: contactReducere,
+    plans: planReducer,
     // categories: categoryReducer,
     // subCategories: subCategoriesReducer,
     // subSubCategories: subSubCategoriesReducer,
@@ -45,7 +48,7 @@ export const store = configureStore({
     // invoices: invoiceReducer,
     // tax: taxReducer,
     // returns: returnReducer,
-    // whitelist: whitelistReducer ,  
+    // whitelist: whitelistReducer ,
     // wallet:walletReducer,
     // address: addressReducer,
     // offer: offerReducer,
@@ -54,16 +57,11 @@ export const store = configureStore({
     // settings: settingReducer,
     // authCookie: authCookieReducer,
   },
-    middleware: (getDefaultMiddleware) =>
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     }),
-
- 
-})
+});
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
- 
-
