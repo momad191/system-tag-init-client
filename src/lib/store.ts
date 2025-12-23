@@ -5,6 +5,10 @@ import channelReducer from "./features/channelSlice";
 import teamReducer from "./features/teamSlice";
 import contactReducere from "./features/contactSlice";
 import planReducer from "./features/planSlice";
+import categoryReducer from "./features/categorySlice";
+import outcomeReducer from "./features/outcomeSlice";
+import replyReducer from "./features/replySlice";
+
 // import counterReducer from './features/counterSlice'
 // import authReducer from './features/authSlice';
 // import categoryReducer from './features/categorySlice'
@@ -36,6 +40,9 @@ export const store = configureStore({
     teams: teamReducer,
     contacts: contactReducere,
     plans: planReducer,
+    categories: categoryReducer,
+    outcomes: outcomeReducer,
+    replies: replyReducer,
     // categories: categoryReducer,
     // subCategories: subCategoriesReducer,
     // subSubCategories: subSubCategoriesReducer,

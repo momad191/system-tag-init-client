@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { CATEGORIES_URL } from "@/config/apiConfig"; 
+import { CATEGORIES_URL } from "@/config/apiConfig";
 
 /* =========================
    Types
@@ -191,7 +191,9 @@ const categorySlice = createSlice({
       })
       .addCase(updateCategory.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.categories.findIndex((c) => c._id === action.payload._id);
+        const index = state.categories.findIndex(
+          (c) => c._id === action.payload._id,
+        );
         if (index !== -1) state.categories[index] = action.payload;
         state.currentCategory = action.payload;
       })
@@ -207,7 +209,9 @@ const categorySlice = createSlice({
       })
       .addCase(deleteCategory.fulfilled, (state, action) => {
         state.loading = false;
-        state.categories = state.categories.filter((c) => c._id !== action.payload);
+        state.categories = state.categories.filter(
+          (c) => c._id !== action.payload,
+        );
         state.total -= 1;
       })
       .addCase(deleteCategory.rejected, (state, action) => {
@@ -253,5 +257,6 @@ const categorySlice = createSlice({
    Exports
 ========================= */
 
-export const { clearCurrentCategory, setCategoryToEdit } = categorySlice.actions;
+export const { clearCurrentCategory, setCategoryToEdit } =
+  categorySlice.actions;
 export default categorySlice.reducer;

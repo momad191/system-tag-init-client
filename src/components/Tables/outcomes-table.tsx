@@ -1,4 +1,18 @@
-import { TrashIcon } from "@/assets/icons";
+"use client";
+
+import { useEffect,useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import type { RootState, AppDispatch } from "@/lib/store"; 
+
+import {
+  fetchOutcomes,
+  deleteOutcome,
+} from "@/lib/features/outcomeSlice";
+import type { Outcome } from "@/lib/features/outcomeSlice";
+
+import { TrashIcon, PencilSquareIcon } from "@/assets/icons";
+ 
 import {
   Table,
   TableBody,
@@ -7,48 +21,117 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
-import dayjs from "dayjs";
-import { getOutcomesTableData } from "./fetch";
-import { DownloadIcon, PreviewIcon } from "./icons";
 
-export async function OutcomesTable() {
-  const data = await getOutcomesTableData();
+import EditOutcomeModal from "@/app/settings/outcomes/EditOutcomeModal";
+
+
+export function OutcomesTable() {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { outcomes, loading, error } = useSelector(
+    (state: RootState) => state.outcomes
+  );
+
+
+
+  const [editOpen, setEditOpen] = useState(false);
+  const [selectedOutcome, setSelectedOutcome] = useState<Outcome | null>(null);
+
+
+  /* ----------------------------------
+     Fetch outcomes on mount
+  ----------------------------------- */
+  useEffect(() => {
+    dispatch(fetchOutcomes({ page: 1, limit: 10 }));
+  }, [dispatch]);
+
+  /* ----------------------------------
+     Delete handler
+  ----------------------------------- */
+  const handleDelete = (id: string) => {
+    if (confirm("Are you sure you want to delete this outcome?")) {
+      dispatch(deleteOutcome(id));
+    }
+  };
+
+  /* ----------------------------------
+     Loading / Error states
+  ----------------------------------- */
+  if (loading) {
+    return (
+      <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-dark">
+        Loading outcomes...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="rounded-lg bg-white p-6 text-danger shadow dark:bg-gray-dark">
+        {error}
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5">
       <Table>
         <TableHeader>
           <TableRow className="border-none bg-[#F7F9FC] dark:bg-dark-2 [&>th]:py-4 [&>th]:text-base [&>th]:text-dark [&>th]:dark:text-white">
-            <TableHead className="min-w-[155px] xl:pl-7.5">name</TableHead>
             <TableHead className="min-w-[155px] xl:pl-7.5">
-              description
+              Name
             </TableHead>
-            <TableHead className="text-right xl:pr-7.5">Actions</TableHead>
+            <TableHead className="min-w-[155px] xl:pl-7.5">
+              Description
+            </TableHead>
+            <TableHead className="text-right xl:pr-7.5">
+              Actions
+            </TableHead>
+
           </TableRow>
         </TableHeader>
 
         <TableBody>
-          {data.map((item, index) => (
-            <TableRow key={index} className="border-[#eee] dark:border-dark-3">
+          {outcomes.length === 0 && (
+            <TableRow>
+              <TableCell
+                colSpan={3}
+                className="py-6 text-center text-gray-500"
+              >
+                No outcomes found
+              </TableCell>
+            </TableRow>
+          )}
+
+          {outcomes.map((item) => (
+            <TableRow
+              key={item._id}
+              className="border-[#eee] dark:border-dark-3"
+            >
               <TableCell className="min-w-[155px] xl:pl-7.5">
-                <h5 className="text-dark dark:text-white">{item.name}</h5>
+                <h5 className="text-dark dark:text-white">
+                  {item.name}
+                </h5>
               </TableCell>
 
               <TableCell className="min-w-[155px] xl:pl-7.5">
-                <h5 className="text-dark dark:text-white">
+                <p className="text-dark dark:text-white">
                   {item.description}
-                </h5>
+                </p>
               </TableCell>
+
               <TableCell className="xl:pr-7.5">
                 <div className="flex items-center justify-end gap-x-3.5">
                   <button className="hover:text-primary">
-                    <span className="sr-only">View Invoice</span>
-                    <PreviewIcon />
+                    <span className="sr-only">Edit</span>
+                    <PencilSquareIcon />
                   </button>
 
-                  <button className="hover:text-primary">
-                    <span className="sr-only">Delete Invoice</span>
+                  <button
+                    onClick={() => handleDelete(item._id)}
+                    className="hover:text-danger"
+                  >
+                    <span className="sr-only">Delete</span>
                     <TrashIcon />
                   </button>
                 </div>

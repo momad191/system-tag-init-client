@@ -5,7 +5,7 @@ import { OUTCOMES_URL } from "@/config/apiConfig";
 
 /* =========================
    Types
-========================= */
+========================= */ 
 export interface Outcome {
   _id: string;
   userId?: string;
