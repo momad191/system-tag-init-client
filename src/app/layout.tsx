@@ -1,6 +1,9 @@
 import "@/css/satoshi.css";
 import "@/css/style.css";
 
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale } from "next-intl/server";
+
 import { Sidebar } from "@/components/Layouts/sidebar";
 
 import "flatpickr/dist/flatpickr.min.css";
@@ -24,26 +27,30 @@ export const metadata: Metadata = {
     "Next.js admin dashboard toolkit with 200+ templates, UI components, and integrations for fast dashboard development.",
 };
 
-export default function RootLayout({ children }: PropsWithChildren) {
+export default async function RootLayout({ children }: PropsWithChildren) {
+  const locale = await getLocale();
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body>
-        <Providers>
-          <ReduxProvider>
-            <SidebarProvider>
-              <NextTopLoader color="#5750F1" showSpinner={false} />
-              <div className="flex min-h-screen">
-                <Sidebar />
-                <div className="w-full bg-gray-2 dark:bg-[#020d1a]">
-                  <Header />
-                  <main className="isolate mx-auto w-full max-w-screen-2xl overflow-hidden p-4 md:p-6 2xl:p-10">
-                    {children}
-                  </main>
+        <NextIntlClientProvider locale={locale}>
+          <Providers>
+            <ReduxProvider>
+              <SidebarProvider>
+                <NextTopLoader color="#5750F1" showSpinner={false} />
+                <div className="flex min-h-screen">
+                  <Sidebar />
+                  <div className="w-full bg-gray-2 dark:bg-[#020d1a]">
+                    <Header />
+                    <main className="isolate mx-auto w-full max-w-screen-2xl overflow-hidden p-4 md:p-6 2xl:p-10">
+                      {children}
+                    </main>
+                  </div>
                 </div>
-              </div>
-            </SidebarProvider>
-          </ReduxProvider>
-        </Providers>
+              </SidebarProvider>
+            </ReduxProvider>
+          </Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

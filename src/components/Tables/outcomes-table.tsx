@@ -1,18 +1,15 @@
 "use client";
 
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import type { RootState, AppDispatch } from "@/lib/store"; 
+import type { RootState, AppDispatch } from "@/lib/store";
 
-import {
-  fetchOutcomes,
-  deleteOutcome,
-} from "@/lib/features/outcomeSlice";
+import { fetchOutcomes, deleteOutcome } from "@/lib/features/outcomeSlice";
 import type { Outcome } from "@/lib/features/outcomeSlice";
 
 import { TrashIcon, PencilSquareIcon } from "@/assets/icons";
- 
+
 import {
   Table,
   TableBody,
@@ -23,20 +20,19 @@ import {
 } from "@/components/ui/table";
 
 import EditOutcomeModal from "@/app/settings/outcomes/EditOutcomeModal";
-
+import DeleteOutcomeModal from "@/app/settings/outcomes/DeleteOutcomeModal";
 
 export function OutcomesTable() {
   const dispatch = useDispatch<AppDispatch>();
 
   const { outcomes, loading, error } = useSelector(
-    (state: RootState) => state.outcomes
+    (state: RootState) => state.outcomes,
   );
-
-
 
   const [editOpen, setEditOpen] = useState(false);
   const [selectedOutcome, setSelectedOutcome] = useState<Outcome | null>(null);
 
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   /* ----------------------------------
      Fetch outcomes on mount
@@ -67,7 +63,7 @@ export function OutcomesTable() {
 
   if (error) {
     return (
-      <div className="rounded-lg bg-white p-6 text-danger shadow dark:bg-gray-dark">
+      <div className="text-danger rounded-lg bg-white p-6 shadow dark:bg-gray-dark">
         {error}
       </div>
     );
@@ -78,26 +74,18 @@ export function OutcomesTable() {
       <Table>
         <TableHeader>
           <TableRow className="border-none bg-[#F7F9FC] dark:bg-dark-2 [&>th]:py-4 [&>th]:text-base [&>th]:text-dark [&>th]:dark:text-white">
-            <TableHead className="min-w-[155px] xl:pl-7.5">
-              Name
-            </TableHead>
+            <TableHead className="min-w-[155px] xl:pl-7.5">Name</TableHead>
             <TableHead className="min-w-[155px] xl:pl-7.5">
               Description
             </TableHead>
-            <TableHead className="text-right xl:pr-7.5">
-              Actions
-            </TableHead>
-
+            <TableHead className="text-right xl:pr-7.5">Actions</TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
           {outcomes.length === 0 && (
             <TableRow>
-              <TableCell
-                colSpan={3}
-                className="py-6 text-center text-gray-500"
-              >
+              <TableCell colSpan={3} className="py-6 text-center text-gray-500">
                 No outcomes found
               </TableCell>
             </TableRow>
@@ -109,26 +97,31 @@ export function OutcomesTable() {
               className="border-[#eee] dark:border-dark-3"
             >
               <TableCell className="min-w-[155px] xl:pl-7.5">
-                <h5 className="text-dark dark:text-white">
-                  {item.name}
-                </h5>
+                <h5 className="text-dark dark:text-white">{item.name}</h5>
               </TableCell>
 
               <TableCell className="min-w-[155px] xl:pl-7.5">
-                <p className="text-dark dark:text-white">
-                  {item.description}
-                </p>
+                <p className="text-dark dark:text-white">{item.description}</p>
               </TableCell>
 
               <TableCell className="xl:pr-7.5">
                 <div className="flex items-center justify-end gap-x-3.5">
-                  <button className="hover:text-primary">
+                  <button
+                    onClick={() => {
+                      setSelectedOutcome(item);
+                      setEditOpen(true);
+                    }}
+                    className="hover:text-primary"
+                  >
                     <span className="sr-only">Edit</span>
                     <PencilSquareIcon />
                   </button>
 
                   <button
-                    onClick={() => handleDelete(item._id)}
+                    onClick={() => {
+                      setSelectedOutcome(item);
+                      setDeleteOpen(true);
+                    }}
                     className="hover:text-danger"
                   >
                     <span className="sr-only">Delete</span>
@@ -140,6 +133,24 @@ export function OutcomesTable() {
           ))}
         </TableBody>
       </Table>
+
+      <EditOutcomeModal
+        open={editOpen}
+        outcome={selectedOutcome}
+        onClose={() => {
+          setEditOpen(false);
+          setSelectedOutcome(null);
+        }}
+      />
+
+      <DeleteOutcomeModal
+        open={deleteOpen}
+        outcome={selectedOutcome}
+        onClose={() => {
+          setDeleteOpen(false);
+          setSelectedOutcome(null);
+        }}
+      />
     </div>
   );
 }

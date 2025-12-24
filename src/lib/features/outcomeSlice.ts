@@ -5,7 +5,7 @@ import { OUTCOMES_URL } from "@/config/apiConfig";
 
 /* =========================
    Types
-========================= */ 
+========================= */
 export interface Outcome {
   _id: string;
   userId?: string;
@@ -67,9 +67,7 @@ export const createOutcome = createAsyncThunk<
     });
     return res.data;
   } catch (err: any) {
-    return thunkAPI.rejectWithValue(
-      err.response?.data?.message || err.message
-    );
+    return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
   }
 });
 
@@ -86,9 +84,7 @@ export const updateOutcome = createAsyncThunk<
     });
     return res.data;
   } catch (err: any) {
-    return thunkAPI.rejectWithValue(
-      err.response?.data?.message || err.message
-    );
+    return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
   }
 });
 
@@ -105,9 +101,7 @@ export const deleteOutcome = createAsyncThunk<
     });
     return id;
   } catch (err: any) {
-    return thunkAPI.rejectWithValue(
-      err.response?.data?.message || err.message
-    );
+    return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
   }
 });
 
@@ -124,9 +118,7 @@ export const fetchOutcomes = createAsyncThunk<
     });
     return res.data;
   } catch (err: any) {
-    return thunkAPI.rejectWithValue(
-      err.response?.data?.message || err.message
-    );
+    return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
   }
 });
 
@@ -140,9 +132,7 @@ export const fetchOutcomeById = createAsyncThunk<
     const res = await axios.get<Outcome>(`${OUTCOMES_URL}/${id}`);
     return res.data;
   } catch (err: any) {
-    return thunkAPI.rejectWithValue(
-      err.response?.data?.message || err.message
-    );
+    return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
   }
 });
 
@@ -182,7 +172,7 @@ const outcomeSlice = createSlice({
       .addCase(updateOutcome.fulfilled, (state, action) => {
         state.loading = false;
         const index = state.outcomes.findIndex(
-          (o) => o._id === action.payload._id
+          (o) => o._id === action.payload._id,
         );
         if (index !== -1) state.outcomes[index] = action.payload;
         state.currentOutcome = action.payload;
@@ -199,9 +189,7 @@ const outcomeSlice = createSlice({
       })
       .addCase(deleteOutcome.fulfilled, (state, action) => {
         state.loading = false;
-        state.outcomes = state.outcomes.filter(
-          (o) => o._id !== action.payload
-        );
+        state.outcomes = state.outcomes.filter((o) => o._id !== action.payload);
         state.total -= 1;
       })
       .addCase(deleteOutcome.rejected, (state, action) => {
