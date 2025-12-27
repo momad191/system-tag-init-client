@@ -52,6 +52,7 @@ interface ChannelsState {
   channelToShow: Channel | null; // for show
   loading: boolean;
   error: string | null;
+  channelCount: number; // ✅ NEW: total number of channels
 }
 
 /* ======================================================
@@ -238,6 +239,38 @@ export const updateChannel = createAsyncThunk<
 );
 
 
+// ✅ Count all channels
+export const countAllChannels = createAsyncThunk<
+  number,
+  void,
+  { rejectValue: string }
+>("channels/countAll", async (_, { rejectWithValue }) => {
+  try {
+    const token = Cookies.get("token");
+    const userId = Cookies.get("userId");
+
+    const res = await fetch(`${CHANNELS_URL}/count/userid/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      return rejectWithValue(err);
+    }
+
+    const data = await res.json();
+
+    return data.total; // { total: 7 }
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
+
+
+
+
 
 /* ======================================================
    Slice
@@ -250,6 +283,7 @@ const initialState: ChannelsState = {
   channelToShow: null,
   loading: false,
   error: null,
+  channelCount: 0, // ✅ NEW: initialize channel count
 };
 
 const channelSlice = createSlice({
@@ -306,12 +340,16 @@ const channelSlice = createSlice({
           state.channels[index] = action.payload;
         }
       })
-      
+
       // Delete
       .addCase(deleteChannelById.fulfilled, (state, action) => {
         state.channels = state.channels.filter(
           (c) => c.id !== action.payload,
         );
+      })
+      // Count all channels
+      .addCase(countAllChannels.fulfilled, (state, action) => {
+        state.channelCount = action.payload;
       });
   },
 });

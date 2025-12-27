@@ -56,6 +56,7 @@ interface TeamsState {
   teamToShowId: string | null; // ✅ FIX
   loading: boolean;
   loadingTeamById: boolean; // ✅ NEW
+  totalTeamsCount: number;  // ✅ NEW (from /teams/count)
   error: string | null;
   total: number;
   currentTeam: Team | null;
@@ -69,6 +70,7 @@ const initialState: TeamsState = {
   teamToShowId: null,
   loading: false,
   loadingTeamById: false, // ✅
+  totalTeamsCount: 0,  // ✅
   error: null,
   total: 0,
   currentTeam: null,
@@ -198,6 +200,36 @@ export const fetchTeamsByMemberId = createAsyncThunk(
   },
 );
 
+
+// ✅ Count all teams
+export const countAllTeams = createAsyncThunk<
+  number,
+  void,
+  { rejectValue: string }
+>("teams/countAllTeams", async (_, thunkAPI) => {
+  try {
+    const token = Cookies.get("token");
+    const userId = Cookies.get("userId");
+
+    const response = await axios.get<{ total: number }>(
+      `${TEAMS_URL}/count/userid/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data.total;
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue(
+      err.response?.data?.message || err.message
+    );
+  }
+});
+
+ 
+
 // ----------------------------
 // Slice
 // ----------------------------
@@ -320,7 +352,26 @@ const teamSlice = createSlice({
     builder.addCase(fetchTeamById.rejected, (state, action) => {
       state.loadingTeamById = false;
       state.error = action.payload as string;
+    })
+    // ✅ Count all teams
+    builder.addCase(countAllTeams.pending, (state) => {
+      state.loading = true;
+      state.error = null;
     });
+    builder.addCase(
+      countAllTeams.fulfilled,
+      (state, action: PayloadAction<number>) => {
+        state.loading = false;
+        state.totalTeamsCount = action.payload;
+      },
+    );
+    builder.addCase(
+      countAllTeams.rejected,
+      (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = action.payload;
+      },
+    );  
   },
 });
 

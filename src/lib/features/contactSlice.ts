@@ -32,6 +32,7 @@ interface ContactsState {
   totalPages: number;
 
   currentContact: Contact | null;
+    contactCount: number; // ✅ NEW
 
   loading: boolean;
   loadingById: boolean;
@@ -50,6 +51,7 @@ const initialState: ContactsState = {
   totalPages: 0,
   currentContact: null,
   contactToDelete: null, // ✅
+   contactCount: 0, // ✅ NE
   loading: false,
   loadingById: false,
   error: null,
@@ -161,6 +163,35 @@ export const fetchContactById = createAsyncThunk<
   }
 });
 
+
+/* ---- Count Contacts ---- */
+export const countAllContacts = createAsyncThunk<
+  number,
+  void,
+  { rejectValue: string }
+>("contacts/countAllContacts", async (_, thunkAPI) => {
+  try {
+    const token = Cookies.get("token");
+    const userId = Cookies.get("userId");
+
+    const res = await axios.get<{ total: number }>(
+      `${CONTACTS_URL}/count/userid/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return res.data.total;
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue(
+      err.response?.data?.message || err.message
+    );
+  }
+});
+
+
 /* =========================
    Slice
 ========================= */
@@ -263,7 +294,21 @@ const contactSlice = createSlice({
       .addCase(fetchContactById.rejected, (state, action) => {
         state.loadingById = false;
         state.error = action.payload || "Failed to fetch contact";
+      })
+            /* ===== Count ===== */
+      .addCase(countAllContacts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(countAllContacts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.contactCount = action.payload;
+      })
+      .addCase(countAllContacts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to count contacts";
       });
+      
   },
 });
 

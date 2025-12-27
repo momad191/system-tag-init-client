@@ -336,13 +336,49 @@ export const deleteUserById = createAsyncThunk<
 });
 
 // ✅ Count users
-export const countAllUsers = createAsyncThunk<number>(
-  "users/countAll",
-  async () => {
-    const res = await axios.get(`${USERS_URL}/count`);
-    return res.data.total;
-  },
-);
+// export const countAllUsers = createAsyncThunk<number>(
+//   "users/countAll",
+//   async () => {
+//     const res = await axios.get(`${USERS_URL}/count`);
+//     return res.data.total;
+//   },
+// );
+
+// ✅ Count all users
+export const countAllUsers = createAsyncThunk<
+  number,
+  void,
+  { rejectValue: string }
+>("users/countAllUsers", async (_, { rejectWithValue }) => {
+  try {
+    const token = Cookies.get("token");
+    const userId = Cookies.get("userId");
+
+    if (!token) {
+      return rejectWithValue("No auth token");
+    }
+
+    const res = await fetch(`${USERS_URL}/count/userid/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      return rejectWithValue(err.message || "Failed to count users");
+    }
+
+    const data = await res.json();
+
+    return data.total; // { total: number }
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
+
+
+
 
 /* ======================================================
    Slice
@@ -418,9 +454,23 @@ const userSlice = createSlice({
         state.allUsers = state.allUsers.filter((u) => u.id !== action.payload);
       })
 
+      // .addCase(countAllUsers.fulfilled, (state, action) => {
+      //   state.userCount = action.payload;
+      // });
+
+      .addCase(countAllUsers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(countAllUsers.fulfilled, (state, action) => {
+        state.loading = false;
         state.userCount = action.payload;
+      })
+      .addCase(countAllUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to count users";
       });
+
   },
 });
 
